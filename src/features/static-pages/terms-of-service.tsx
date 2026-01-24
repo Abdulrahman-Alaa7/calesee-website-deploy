@@ -23,10 +23,10 @@ const TermsOfService = () => {
           </h1>
         </div>
 
-        <Card className="rounded-3xl shadow-md overflow-hidden bg-[#fdf9f8] dark:bg-[#151515]/70 border border-transparent">
+        <Card className="rounded-3xl shadow-md overflow-hidden bg-[#fdf9f8]  border border-transparent">
           <CardContent className="p-6 sm:p-8 md:p-10">
             <div
-              className={`text-[#444] dark:text-[#ffffffb3] font-Poppins leading-relaxed
+              className={`text-[#444]  font-Poppins leading-relaxed
                           text-sm sm:text-base md:text-lg space-y-10 ${
                             lang === "ar" ? "text-right" : "text-left"
                           }`}
@@ -44,7 +44,7 @@ const TermsOfService = () => {
                       </h2>
                     )}
                     {paragraph && (
-                      <p className="text-[#4b3b35] dark:text-[#dcdcdc] leading-relaxed">
+                      <p className="text-[#4b3b35]  leading-relaxed">
                         {paragraph}
                         {index === 9 && (
                           <>
@@ -61,7 +61,7 @@ const TermsOfService = () => {
                       </p>
                     )}
                     {index !== 9 && (
-                      <Separator className="my-8 bg-[#d9b9a0]/40 dark:bg-gray-700" />
+                      <Separator className="my-8 bg-[#d9b9a0]/40 " />
                     )}
                   </div>
                 );

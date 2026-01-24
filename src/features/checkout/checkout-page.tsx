@@ -87,7 +87,7 @@ const CheckoutPage = () => {
     data: T[],
     arKey: keyof T,
     enKey: keyof T,
-    lang: string
+    lang: string,
   ): T[] {
     return [...data].sort((a, b) =>
       lang === "ar"
@@ -96,7 +96,7 @@ const CheckoutPage = () => {
           })
         : String(a[enKey]).localeCompare(String(b[enKey]), "en", {
             sensitivity: "base",
-          })
+          }),
     );
   }
 
@@ -106,7 +106,7 @@ const CheckoutPage = () => {
     govNotSorted,
     "governorate_name_ar",
     "governorate_name_en",
-    lang
+    lang,
   );
 
   const cit = dataCit.dataCit;
@@ -115,13 +115,13 @@ const CheckoutPage = () => {
     cit.filter((city) => city.governorate_id === selectedGovernorate),
     "city_name_ar",
     "city_name_en",
-    lang
+    lang,
   );
   const filteredSecCities = sortDataByLocale<checkoutCities>(
     cit.filter((city) => city.governorate_id === selectedSecGovernorate),
     "city_name_ar",
     "city_name_en",
-    lang
+    lang,
   );
 
   const defaultValues = {
@@ -166,7 +166,7 @@ const CheckoutPage = () => {
         },
         {
           message: `${tCheckout("validPhoneNum")}`,
-        }
+        },
       ),
 
     fullName: z
@@ -288,7 +288,7 @@ const CheckoutPage = () => {
                 }  lg:rounded-r-3xl lg:order-first order-last`}
               >
                 <div className="rounded-md mt-3">
-                  <div className="text-sm text-[#666] dark:text-[#939db6] flex justify-center items-center gap-2 mx-auto mb-3">
+                  <div className="text-sm text-[#666] flex justify-center items-center gap-2 mx-auto mb-3">
                     <HiLockClosed size={16} /> {tCheckout("secAndEnc")}
                   </div>
                   <Form {...form}>
@@ -345,7 +345,7 @@ const CheckoutPage = () => {
                                   {...field}
                                   className="py-6 px-4 rounded-full"
                                   onWheel={(
-                                    e: React.WheelEvent<HTMLInputElement>
+                                    e: React.WheelEvent<HTMLInputElement>,
                                   ) => e.currentTarget.blur()}
                                   disabled={
                                     getSettingsLoading || createOrderLoading
@@ -404,7 +404,7 @@ const CheckoutPage = () => {
                                     {...field}
                                     className="py-6 px-4 rounded-full"
                                     onWheel={(
-                                      e: React.WheelEvent<HTMLInputElement>
+                                      e: React.WheelEvent<HTMLInputElement>,
                                     ) => e.currentTarget.blur()}
                                     disabled={
                                       getSettingsLoading || createOrderLoading
@@ -431,7 +431,7 @@ const CheckoutPage = () => {
                               <FormControl>
                                 <Input
                                   placeholder={`${tCheckout(
-                                    "fullNameInputPlace"
+                                    "fullNameInputPlace",
                                   )}`}
                                   {...field}
                                   className="py-6 px-4 rounded-full"
@@ -458,10 +458,10 @@ const CheckoutPage = () => {
                                       (g) =>
                                         (lang === "ar"
                                           ? g.governorate_name_ar
-                                          : g.governorate_name_en) === value
+                                          : g.governorate_name_en) === value,
                                     );
                                     setSelectedGovernorate(
-                                      selectedGov ? selectedGov.id : ""
+                                      selectedGov ? selectedGov.id : "",
                                     );
                                   }}
                                   defaultValue={field.value}
@@ -525,7 +525,7 @@ const CheckoutPage = () => {
                                     >
                                       <SelectValue
                                         placeholder={`${tCheckout(
-                                          "cityPlace"
+                                          "cityPlace",
                                         )}`}
                                       />
                                     </SelectTrigger>
@@ -608,12 +608,13 @@ const CheckoutPage = () => {
                                           (g) =>
                                             (lang === "ar"
                                               ? g.governorate_name_ar
-                                              : g.governorate_name_en) === value
+                                              : g.governorate_name_en) ===
+                                            value,
                                         );
                                         setSelectedSecGovernorate(
                                           selectedSecGov
                                             ? selectedSecGov.id
-                                            : ""
+                                            : "",
                                         );
                                       }}
                                       defaultValue={field.value}
@@ -629,7 +630,7 @@ const CheckoutPage = () => {
                                         >
                                           <SelectValue
                                             placeholder={`${tCheckout(
-                                              "govPlace"
+                                              "govPlace",
                                             )}`}
                                           />
                                         </SelectTrigger>
@@ -686,7 +687,7 @@ const CheckoutPage = () => {
                                         >
                                           <SelectValue
                                             placeholder={`${tCheckout(
-                                              "cityPlace"
+                                              "cityPlace",
                                             )}`}
                                           />
                                         </SelectTrigger>
@@ -711,7 +712,7 @@ const CheckoutPage = () => {
                                                 ? city.city_name_ar
                                                 : city.city_name_en}
                                             </SelectItem>
-                                          )
+                                          ),
                                         )}
                                       </SelectContent>
                                     </Select>
@@ -732,7 +733,7 @@ const CheckoutPage = () => {
                                   <FormControl>
                                     <Input
                                       placeholder={`${tCheckout(
-                                        "addressPlace"
+                                        "addressPlace",
                                       )}`}
                                       {...field}
                                       className="py-6 px-4 rounded-full"
@@ -905,7 +906,7 @@ const CheckoutPage = () => {
                             </div>
                             <div className="flex items-center col-span-2 pt-2">
                               <div className="flex items-center space-x-2 text-sm justify-between gap-1">
-                                <span className="text-[#666] dark:text-[#939db6] inline-flex gap-1 items-center">
+                                <span className="text-[#666]  inline-flex gap-1 items-center">
                                   {ele.quantity} <span>x</span> {ele.price}
                                 </span>
                                 <span className="text-text-primary font-semibold inline-flex gap-1 items-center">
@@ -931,7 +932,7 @@ const CheckoutPage = () => {
                 </Accordion>
 
                 <div className="px-8 border-b">
-                  <div className="flex justify-between py-4 text-[#666] dark:text-[#939db6]">
+                  <div className="flex justify-between py-4 text-[#666] ">
                     <span>{tCheckout("subTotal")}</span>
                     <span className="font-semibold text-primary">
                       {lang === "ar" ? (
@@ -945,7 +946,7 @@ const CheckoutPage = () => {
                       )}
                     </span>
                   </div>
-                  <div className="flex justify-between py-4 text-[#666] dark:text-[#939db6]">
+                  <div className="flex justify-between py-4 text-[#666] ">
                     <span>{tCheckout("shipping")}</span>
                     <span className="font-semibold text-primary">
                       {lang === "ar" ? (
@@ -966,7 +967,7 @@ const CheckoutPage = () => {
                     </span>
                   </div>
                 </div>
-                <div className="font-semibold text-xl px-8 flex justify-between py-8 text-[#666] dark:text-[#939db6]">
+                <div className="font-semibold text-xl px-8 flex justify-between py-8 text-[#666] ">
                   <span>{tCheckout("total")}</span>
                   <span>
                     {lang === "ar" ? (

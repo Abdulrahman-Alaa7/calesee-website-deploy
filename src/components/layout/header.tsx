@@ -62,7 +62,7 @@ const Header = () => {
     <header
       className={`sticky inset-x-0 top-0 z-50 mx-auto w-full md:px-2 transition-all duration-300 ${
         active && "border-b  border-[#ccc] shadow   "
-      } bg-white/80 dark:!bg-background py-2  backdrop-blur-lg`}
+      } bg-white/80  py-2  backdrop-blur-lg`}
       aria-label="Main Navigation"
     >
       <div className="px-1 relative">
@@ -87,7 +87,7 @@ const Header = () => {
             {linksData.map((link, index: number) => (
               <Link
                 key={index}
-                className="inline-block px-4 py-2 text-xs xl:text-sm 2xl:text-base rounded-3xl text-gray-900 dark:text-gray-100 dark:hover:text-gray-900 transition-all duration-200 hover:bg-secondary hover:text-gray-900"
+                className="inline-block px-4 py-2 text-xs xl:text-sm 2xl:text-base rounded-3xl text-gray-900  transition-all duration-200 hover:bg-secondary hover:text-gray-900"
                 href={link.url}
                 onClick={() => {
                   if (typeof window !== "undefined" && link.url === "/store") {

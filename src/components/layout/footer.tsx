@@ -91,7 +91,7 @@ const Footer = () => {
                     <TooltipTrigger asChild className="">
                       <Link
                         href={link.href}
-                        className="text-gray-700 dark:text-gray-300 text-xl hover:text-[#a8603a] transition-all duration-300 hover:scale-110"
+                        className="text-gray-700  text-xl hover:text-[#a8603a] transition-all duration-300 hover:scale-110"
                         target="_blank"
                         aria-label={`Follow us on ${link.alt.split(" ")[0]}`}
                       >
@@ -128,7 +128,7 @@ const Footer = () => {
                 <LinkNav
                   key={index}
                   href={link.href}
-                  className="w-fit mx-auto md:mx-0 hover:underline hover:underline-offset-4 text-[#666] leading-loose text-[14px] dark:text-[#939db6] hover:text-primary dark:hover:text-primary transition-all duration-300"
+                  className="w-fit mx-auto md:mx-0 hover:underline hover:underline-offset-4 text-[#666] leading-loose text-[14px]  hover:text-primary  transition-all duration-300"
                 >
                   {link.text}
                 </LinkNav>
@@ -153,7 +153,7 @@ const Footer = () => {
                       }
                     }
                   }}
-                  className="w-fit mx-auto md:mx-0 hover:underline hover:underline-offset-4 text-[#666] leading-loose text-[14px] dark:text-[#939db6] hover:text-primary dark:hover:text-primary transition-all duration-300"
+                  className="w-fit mx-auto md:mx-0 hover:underline hover:underline-offset-4 text-[#666] leading-loose text-[14px]  hover:text-primary  transition-all duration-300"
                 >
                   {link.text}
                 </LinkNav>
@@ -171,7 +171,7 @@ const Footer = () => {
             ) : (
               <p
                 dir="ltr"
-                className="text-left mb-4 flex items-center justify-center md:justify-start gap-2 text-[#666] leading-loose text-[14px] dark:text-[#939db6]"
+                className="text-left mb-4 flex items-center justify-center md:justify-start gap-2 text-[#666] leading-loose text-[14px] "
               >
                 <MapPin />
                 {featShip?.address}
@@ -181,7 +181,7 @@ const Footer = () => {
             <Link
               dir="ltr"
               href={`mailto:info@calesee.com`}
-              className="text-left  md:mx-0 mb-4 flex items-center justify-center md:justify-start gap-2 text-[#666] leading-loose text-[14px] dark:text-[#939db6] hover:!text-primary dark:hover:text-primary !transition-all !duration-300"
+              className="text-left  md:mx-0 mb-4 flex items-center justify-center md:justify-start gap-2 text-[#666] leading-loose text-[14px]  hover:!text-primary  !transition-all !duration-300"
             >
               <Mail />
               info@calesee.com
@@ -189,7 +189,7 @@ const Footer = () => {
             <Link
               dir="ltr"
               href={`tel:+201098198827`}
-              className="text-left md:mx-0 mb-4 flex items-center justify-center md:justify-start gap-2 text-[#666] leading-loose text-[14px] dark:text-[#939db6] hover:text-primary dark:hover:text-primary transition-all duration-300"
+              className="text-left md:mx-0 mb-4 flex items-center justify-center md:justify-start gap-2 text-[#666] leading-loose text-[14px] hover:text-primary  transition-all duration-300"
             >
               <Phone /> <span>+20 1098 198 827</span>
             </Link>

@@ -49,8 +49,8 @@ export default function FiltersPanel({
     if (!products.length) return 0;
     return Math.min(
       ...products.map((p) =>
-        p.estimatedPrice && p.estimatedPrice > 0 ? p.estimatedPrice : p.price
-      )
+        p.estimatedPrice && p.estimatedPrice > 0 ? p.estimatedPrice : p.price,
+      ),
     );
   }, [products]);
 
@@ -58,17 +58,17 @@ export default function FiltersPanel({
     if (!products.length) return 0;
     return Math.max(
       ...products.map((p) =>
-        p.estimatedPrice && p.estimatedPrice > 0 ? p.estimatedPrice : p.price
-      )
+        p.estimatedPrice && p.estimatedPrice > 0 ? p.estimatedPrice : p.price,
+      ),
     );
   }, [products]);
 
   const sizeOptions = useMemo(
     () =>
       [...availableSizes].sort(
-        (a, b) => Number(a.valueSize) - Number(b.valueSize)
+        (a, b) => Number(a.valueSize) - Number(b.valueSize),
       ),
-    [availableSizes]
+    [availableSizes],
   );
 
   const colorOptions = useMemo(() => [...availableColors], [availableColors]);
@@ -110,17 +110,16 @@ export default function FiltersPanel({
           <h5 className="text-sm font-medium mb-2">{t("productsFilCat")}</h5>
           <div className="grid grid-cols-2 gap-2">
             <Button
-              variant={selectedCategory === "new" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("new")}
-            >
-              {t("newArrive")}
-            </Button>
-
-            <Button
               variant={selectedCategory === "hot" ? "default" : "outline"}
               onClick={() => setSelectedCategory("hot")}
             >
               {t("whatHot")}
+            </Button>
+            <Button
+              variant={selectedCategory === "new" ? "default" : "outline"}
+              onClick={() => setSelectedCategory("new")}
+            >
+              {t("newArrive")}
             </Button>
 
             {categories.map((c) => (

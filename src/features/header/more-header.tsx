@@ -134,7 +134,7 @@ const MoreHeader = () => {
               onClick={() => handleNavigationItemClick(item)}
               className="group relative gap-1 flex items-start w-full py-2 transition-all duration-300 hover:translate-x-2 uppercase"
             >
-              <span className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-[#947268] transition-colors duration-300">
+              <span className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900  group-hover:text-[#947268] transition-colors duration-300">
                 {item.href === "/categories"
                   ? t("productsFilCat")
                   : tFooter(item.label)}
@@ -155,7 +155,7 @@ const MoreHeader = () => {
               href={s.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 hover:text-[#a8603a] transition-all duration-300 hover:scale-110"
+              className="text-lg sm:text-xl text-gray-700  hover:text-[#a8603a] transition-all duration-300 hover:scale-110"
             >
               {s.icon}
             </a>

@@ -39,7 +39,7 @@ export default function StorePage({
   const [priceRange, setPriceRange] = useState<number[]>([0, 2000]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("new");
+  const [selectedCategory, setSelectedCategory] = useState<string>("hot");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -64,9 +64,9 @@ export default function StorePage({
     () =>
       filteredProducts.slice(
         (currentPage - 1) * productsPerPage,
-        currentPage * productsPerPage
+        currentPage * productsPerPage,
       ),
-    [filteredProducts, currentPage]
+    [filteredProducts, currentPage],
   );
 
   useEffect(() => {
@@ -76,7 +76,7 @@ export default function StorePage({
     }
 
     const prices = products.map((p) =>
-      p.estimatedPrice && p.estimatedPrice > 0 ? p.estimatedPrice : p.price
+      p.estimatedPrice && p.estimatedPrice > 0 ? p.estimatedPrice : p.price,
     );
 
     const minPrice = Math.min(...prices);
@@ -93,19 +93,13 @@ export default function StorePage({
         ? topProducts
         : products;
 
-    const now = Date.now();
-    const last30Days = now - 1000 * 60 * 60 * 24 * 30;
-
     const filtered = baseList.filter((p) => {
       const price =
         p.estimatedPrice && p.estimatedPrice > 0 ? p.estimatedPrice : p.price;
 
       const inPrice = price >= priceRange[0] && price <= priceRange[1];
 
-      const inNew =
-        selectedCategory === "new"
-          ? !!p.createdAt && new Date(p.createdAt).getTime() > last30Days
-          : true;
+      const inNew = selectedCategory === "new" ? true : true;
 
       const inCategory =
         selectedCategory !== "new" && selectedCategory !== "hot"
@@ -115,15 +109,17 @@ export default function StorePage({
       const inSize =
         selectedSizes.length === 0 ||
         p.sizes?.some((s) =>
-          s.catalogSizeId ? selectedSizes.includes(s.catalogSizeId) : false
+          s.catalogSizeId ? selectedSizes.includes(s.catalogSizeId) : false,
         );
 
       const inColor =
         selectedColors.length === 0 ||
         p.sizes?.some((size) =>
           size.colors?.some((c) =>
-            c.catalogColorId ? selectedColors.includes(c.catalogColorId) : false
-          )
+            c.catalogColorId
+              ? selectedColors.includes(c.catalogColorId)
+              : false,
+          ),
         );
 
       return inPrice && inNew && inCategory && inSize && inColor;
@@ -142,14 +138,14 @@ export default function StorePage({
         sorted.sort(
           (a, b) =>
             new Date(b.createdAt ?? 0).getTime() -
-            new Date(a.createdAt ?? 0).getTime()
+            new Date(a.createdAt ?? 0).getTime(),
         );
         break;
       case "oldest":
         sorted.sort(
           (a, b) =>
             new Date(a.createdAt ?? 0).getTime() -
-            new Date(b.createdAt ?? 0).getTime()
+            new Date(b.createdAt ?? 0).getTime(),
         );
         break;
       case "az":
@@ -199,14 +195,14 @@ export default function StorePage({
     setSelectedSizes((prev) =>
       prev.includes(sizeId)
         ? prev.filter((x) => x !== sizeId)
-        : [...prev, sizeId]
+        : [...prev, sizeId],
     );
 
   const toggleColor = (colorId: string) =>
     setSelectedColors((prev) =>
       prev.includes(colorId)
         ? prev.filter((x) => x !== colorId)
-        : [...prev, colorId]
+        : [...prev, colorId],
     );
 
   const resetFilters = () => {
@@ -214,7 +210,7 @@ export default function StorePage({
       setPriceRange([0, 0]);
     } else {
       const prices = products.map((p) =>
-        p.estimatedPrice && p.estimatedPrice > 0 ? p.estimatedPrice : p.price
+        p.estimatedPrice && p.estimatedPrice > 0 ? p.estimatedPrice : p.price,
       );
       setPriceRange([Math.min(...prices), Math.max(...prices)]);
     }
@@ -277,18 +273,18 @@ export default function StorePage({
                     {sortBy === "default"
                       ? t("productsFilCatDef")
                       : sortBy === "price-asc"
-                      ? t("productsFilterAlphPl")
-                      : sortBy === "price-desc"
-                      ? t("productsFilterAlphPh")
-                      : sortBy === "oldest"
-                      ? t("productsFilterAlphPDo")
-                      : sortBy === "newest"
-                      ? t("productsFilterAlphPDn")
-                      : sortBy === "az"
-                      ? t("productsFilterAlphA")
-                      : sortBy === "za"
-                      ? t("productsFilterAlphZ")
-                      : t("productsFilCatDef")}
+                        ? t("productsFilterAlphPl")
+                        : sortBy === "price-desc"
+                          ? t("productsFilterAlphPh")
+                          : sortBy === "oldest"
+                            ? t("productsFilterAlphPDo")
+                            : sortBy === "newest"
+                              ? t("productsFilterAlphPDn")
+                              : sortBy === "az"
+                                ? t("productsFilterAlphA")
+                                : sortBy === "za"
+                                  ? t("productsFilterAlphZ")
+                                  : t("productsFilCatDef")}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
@@ -372,8 +368,8 @@ export default function StorePage({
                 viewMode === "grid-large"
                   ? "grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3"
                   : viewMode === "grid-compact"
-                  ? "grid-cols-1 xl:grid-cols-2"
-                  : "grid-cols-1"
+                    ? "grid-cols-1 xl:grid-cols-2"
+                    : "grid-cols-1"
               }`}
             >
               {currentProducts.map((product) => (

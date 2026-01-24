@@ -24,33 +24,33 @@ const ShippingPolicy = () => {
           </h1>
         </div>
 
-        <Card className="rounded-3xl shadow-md overflow-hidden bg-[#fdf9f8] dark:bg-[#151515]/70 border border-transparent">
+        <Card className="rounded-3xl shadow-md overflow-hidden bg-[#fdf9f8]  border border-transparent">
           <CardContent className="p-6 sm:p-8 md:p-10">
             <div
-              className={`text-[#444] dark:text-[#ffffffb3] font-Poppins leading-relaxed
+              className={`text-[#444]  font-Poppins leading-relaxed
                           text-sm sm:text-base md:text-lg space-y-6 ${
                             lang === "ar" ? "text-right" : "text-left"
                           }`}
             >
               <Section title={tPage("title1")} />
               <p>{tPage("p1")}</p>
-              <Separator className="my-6 bg-[#d9b9a0]/40 dark:bg-gray-700" />
+              <Separator className="my-6 bg-[#d9b9a0]/40 " />
 
               <Section title={tPage("title2")} />
               <p>{tPage("p2")}</p>
-              <Separator className="my-6 bg-[#d9b9a0]/40 dark:bg-gray-700" />
+              <Separator className="my-6 bg-[#d9b9a0]/40 " />
 
               <Section title={tPage("title3")} />
               <p>{tPage("p3")}</p>
-              <Separator className="my-6 bg-[#d9b9a0]/40 dark:bg-gray-700" />
+              <Separator className="my-6 bg-[#d9b9a0]/40 " />
 
               <Section title={tPage("title4")} />
               <p>{tPage("p4")}</p>
-              <Separator className="my-6 bg-[#d9b9a0]/40 dark:bg-gray-700" />
+              <Separator className="my-6 bg-[#d9b9a0]/40 " />
 
               <Section title={tPage("title5")} />
               <p>{tPage("p5")}</p>
-              <Separator className="my-6 bg-[#d9b9a0]/40 dark:bg-gray-700" />
+              <Separator className="my-6 bg-[#d9b9a0]/40 " />
 
               <Section title={tPage("title6")} />
               <p>
@@ -63,7 +63,7 @@ const ShippingPolicy = () => {
                 </a>
                 &nbsp;{tPage("p62")}
               </p>
-              <Separator className="my-6 bg-[#d9b9a0]/40 dark:bg-gray-700" />
+              <Separator className="my-6 bg-[#d9b9a0]/40 " />
 
               <Section title={tPage("title7")} />
               <p>
@@ -76,11 +76,11 @@ const ShippingPolicy = () => {
                 </Link>
                 &nbsp;{tPage("p73")}
               </p>
-              <Separator className="my-6 bg-[#d9b9a0]/40 dark:bg-gray-700" />
+              <Separator className="my-6 bg-[#d9b9a0]/40 " />
 
               <Section title={tPage("title8")} />
               <p>{tPage("p8")}</p>
-              <Separator className="my-6 bg-[#d9b9a0]/40 dark:bg-gray-700" />
+              <Separator className="my-6 bg-[#d9b9a0]/40 " />
 
               <Section title={tPage("title9")} />
               <p>

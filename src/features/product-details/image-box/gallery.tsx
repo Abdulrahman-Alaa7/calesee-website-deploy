@@ -52,7 +52,7 @@ export function Gallery({
       : [];
 
     return [validMain, ...validImages].filter((i): i is ImageItem =>
-      Boolean(i)
+      Boolean(i),
     );
   }, [mainImage, images]);
 
@@ -107,14 +107,14 @@ export function Gallery({
         (img) =>
           img.linkedColorHex &&
           img.linkedColorHex.toLowerCase() === normalized &&
-          img.isMain
+          img.isMain,
       );
 
       if (targetIndex === -1) {
         targetIndex = allImages.findIndex(
           (img) =>
             img.linkedColorHex &&
-            img.linkedColorHex.toLowerCase() === normalized
+            img.linkedColorHex.toLowerCase() === normalized,
         );
       }
 
@@ -123,7 +123,7 @@ export function Gallery({
       updateImage(targetIndex.toString());
       scrollThumbTo(thumbApi, targetIndex);
     },
-    [allImages, updateImage, scrollThumbTo, thumbApi]
+    [allImages, updateImage, scrollThumbTo, thumbApi],
   );
 
   useEffect(() => {
@@ -132,11 +132,11 @@ export function Gallery({
   }, [onRegisterController, goToImageByColor]);
 
   const buttonClass =
-    "cursor-pointer h-full px-4 sm:px-5 transition-all ease-in-out hover:scale-110 hover:text-black dark:hover:text-white flex items-center justify-center";
+    "cursor-pointer h-full px-4 sm:px-5 transition-all ease-in-out hover:scale-110 hover:text-black flex items-center justify-center";
 
   return (
     <div dir={dir} className="space-y-4">
-      <div className=" cursor-zoom-in relative mx-auto aspect-[4/5] w-full max-w-2xl overflow-hidden rounded-2xl bg-neutral-50 dark:bg-neutral-900 sm:aspect-square lg:max-h-[550px]">
+      <div className=" cursor-zoom-in relative mx-auto aspect-[4/5] w-full max-w-2xl overflow-hidden rounded-2xl bg-neutral-50  sm:aspect-square lg:max-h-[550px]">
         {allImages.length > 0 ? (
           <Image
             fill
@@ -148,8 +148,8 @@ export function Gallery({
             onClick={() => openLightbox(imageIndex.toString())}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center rounded-2xl bg-gray-100 dark:bg-neutral-800">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex h-full w-full items-center justify-center rounded-2xl bg-gray-100 ">
+            <p className="text-sm text-gray-500 ">
               {dir === "rtl" ? "لا توجد صورة متاحة" : "No image available"}
             </p>
           </div>
@@ -161,7 +161,7 @@ export function Gallery({
 
         {hasMultiple && (
           <div className="pointer-events-auto absolute inset-x-0 bottom-4 flex justify-center">
-            <div className="flex h-11 items-center gap-2 rounded-full border border-white/70 bg-neutral-50/90 px-2 text-neutral-700 backdrop-blur-sm dark:border-neutral-700 dark:bg-neutral-900/90 dark:text-neutral-100 shadow-md">
+            <div className="flex h-11 items-center gap-2 rounded-full border border-white/70 bg-neutral-50/90 px-2 text-neutral-700 backdrop-blur-sm 0 shadow-md">
               <button
                 type="button"
                 aria-label={dir === "rtl" ? "الصورة السابقة" : "Previous"}
@@ -175,7 +175,7 @@ export function Gallery({
 
               <div className="mx-1 h-6 w-px bg-neutral-400/60" />
 
-              <span className="hidden text-xs font-medium text-neutral-700 dark:text-neutral-200 sm:inline">
+              <span className="hidden text-xs font-medium text-neutral-700  sm:inline">
                 {imageIndex + 1}{" "}
                 <span className="opacity-70">/ {allImages.length}</span>
               </span>

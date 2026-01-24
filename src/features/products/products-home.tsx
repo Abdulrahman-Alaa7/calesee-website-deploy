@@ -117,7 +117,7 @@ export const ProductsHome = ({
 
     if (selectedSize) {
       const byValue = typedProduct.sizes.find(
-        (s) => getOptionValue(s) === selectedSize
+        (s) => getOptionValue(s) === selectedSize,
       );
       if (byValue) return byValue;
     }
@@ -151,7 +151,7 @@ export const ProductsHome = ({
       }
 
       const exists = colorsForSelectedSize.some(
-        (c) => getOptionValue(c) === selectedColor
+        (c) => getOptionValue(c) === selectedColor,
       );
 
       if (!exists) {
@@ -177,16 +177,16 @@ export const ProductsHome = ({
       toast.success(tS("successAddedBag"));
       setDisplayedQuantity(1);
     },
-    [handleAddNewItemShipping, displayedQuantity, tS]
+    [handleAddNewItemShipping, displayedQuantity, tS],
   );
 
   const handleIncrease = useCallback(
     () => setDisplayedQuantity((p) => p + 1),
-    []
+    [],
   );
   const handleDecrease = useCallback(
     () => setDisplayedQuantity((p) => Math.max(1, p - 1)),
-    []
+    [],
   );
 
   const calculateDiscountPercentage = useCallback(
@@ -195,7 +195,7 @@ export const ProductsHome = ({
       const discountAmount = price - estimatedPrice;
       return Math.round((discountAmount / price) * 100);
     },
-    []
+    [],
   );
 
   const discountPercentage = useMemo(() => {
@@ -210,7 +210,7 @@ export const ProductsHome = ({
       handleAddToWishingList(item);
       toast.success(tS("successAddedFav"));
     },
-    [handleAddToWishingList, tS]
+    [handleAddToWishingList, tS],
   );
 
   const handleDeleteWishingList = useCallback(
@@ -218,12 +218,12 @@ export const ProductsHome = ({
       handleDeleteFromWishingList(id);
       toast(tS("successDelFav"));
     },
-    [handleDeleteFromWishingList, tS]
+    [handleDeleteFromWishingList, tS],
   );
 
   const isExistInWish = useMemo(
     () => wishingList?.some((w) => w.id === product.id),
-    [wishingList, product?.id]
+    [wishingList, product?.id],
   );
 
   const handleBuyItNow = (p: Product, size: string, color?: string) => {
@@ -239,27 +239,27 @@ export const ProductsHome = ({
 
   const handleIncreaseShip = (id: string, size?: string, color?: string) => {
     const current = shippingList.find(
-      (it) => it.id === id && it.size === size && it.color === color
+      (it) => it.id === id && it.size === size && it.color === color,
     );
     if (current)
       handleItemShippingIncreaseOrDecrease(
         id,
         current.quantity + 1,
         size,
-        color
+        color,
       );
   };
 
   const handleDecreaseShip = (id: string, size?: string, color?: string) => {
     const current = shippingList.find(
-      (it) => it.id === id && it.size === size && it.color === color
+      (it) => it.id === id && it.size === size && it.color === color,
     );
     if (current && current.quantity > 1)
       handleItemShippingIncreaseOrDecrease(
         id,
         current.quantity - 1,
         size,
-        color
+        color,
       );
   };
 
@@ -353,7 +353,7 @@ export const ProductsHome = ({
               variant="default"
               className={`${
                 lang === "ar" && "flex-row-reverse"
-              } text-sm rounded-full px-4 bg-black dark:bg-white shadow-md dark:text-black text-white hover:!bg-primary hover:!text-white flex justify-center items-center gap-1`}
+              } text-sm rounded-full px-4 bg-black  text-white hover:!bg-primary hover:!text-white flex justify-center items-center gap-1`}
             >
               {t("soldOutBtn")}
             </Badge>
@@ -717,7 +717,7 @@ export const ProductsHome = ({
                 handleDeleteItemShipping(
                   product.id,
                   product.size,
-                  product.color
+                  product.color,
                 )
               }
               aria-label={`Remove ${product.name} from bag`}

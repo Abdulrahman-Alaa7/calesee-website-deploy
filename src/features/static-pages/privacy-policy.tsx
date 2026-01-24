@@ -12,9 +12,9 @@ const PrivacyPolicy = () => {
         {tHeader("privacyPol")}
       </h1>
 
-      <Card className="shadow-md border-none bg-[#fdf9f8] dark:bg-[#1a1a1a]/70 rounded-3xl overflow-hidden">
+      <Card className="shadow-md border-none bg-[#fdf9f8]  rounded-3xl overflow-hidden">
         <CardContent className="p-6 sm:p-8 md:p-10">
-          <div className="text-[#444] dark:text-[#ffffffb3] font-Poppins leading-relaxed text-sm sm:text-base md:text-lg space-y-6">
+          <div className="text-[#444] font-Poppins leading-relaxed text-sm sm:text-base md:text-lg space-y-6">
             <p>{tPage("p1")}</p>
             <p>{tPage("p2")}</p>
 

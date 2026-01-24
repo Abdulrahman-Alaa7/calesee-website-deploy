@@ -42,9 +42,9 @@ const SectionContainer: React.FC<{
 }> = ({ children, className = "" }) => (
   <section
     className={cn(
-      "w-full mx-auto my-1 md:my-8 bg-white dark:bg-zinc-950",
+      "w-full mx-auto my-1 md:my-8 bg-white ",
       "transition-all duration-500 rounded-3xl",
-      className
+      className,
     )}
   >
     {children}
@@ -108,7 +108,7 @@ const QuantitySelector: React.FC<{
   onDec: () => void;
   disabled?: boolean;
 }> = ({ value, onInc, onDec, disabled }) => (
-  <div className="flex items-center border border-gray-200 dark:border-gray-800 rounded-full p-1 shadow-sm w-fit bg-gray-50 dark:bg-zinc-900">
+  <div className="flex items-center border border-gray-200  rounded-full p-1 shadow-sm w-fit bg-gray-50 ">
     <Button
       type="button"
       variant="ghost"
@@ -197,7 +197,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
 
     if (typedProduct?.images?.length) {
       const filteredImages = typedProduct.images.filter(
-        (img) => img.url !== mainImage.src
+        (img) => img.url !== mainImage.src,
       );
 
       return filteredImages.slice(0, 10).map((image, index) => ({
@@ -286,7 +286,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
       tHeader,
       tHomeProducts,
       colorsForSelectedSize,
-    ]
+    ],
   );
 
   const discountPercentage = useMemo(() => {
@@ -302,7 +302,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
 
   const isExistInWish = useMemo(
     () => wishingList?.some((w) => w.id === product.id),
-    [wishingList, product.id]
+    [wishingList, product.id],
   );
 
   const handleBuyItNow = () => {
@@ -315,8 +315,8 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
   const description = useMemo(() => {
     if (!typedProduct) return "";
     return lang === "ar"
-      ? typedProduct.descriptionAr ?? ""
-      : typedProduct.descriptionEn ?? "";
+      ? (typedProduct.descriptionAr ?? "")
+      : (typedProduct.descriptionEn ?? "");
   }, [typedProduct, lang]);
 
   return (
@@ -346,7 +346,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
                 <div
                   className={cn(
                     "absolute top-6 z-20",
-                    lang === "ar" ? "right-6" : "left-6"
+                    lang === "ar" ? "right-6" : "left-6",
                   )}
                 >
                   <Badge
@@ -362,9 +362,9 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
         </div>
 
         <div className="lg:col-span-5 relative mt-4 lg:mt-0 px-2 md:px-4">
-          <aside className="lg:sticky lg:top-24 flex flex-col gap-6 h-fit bg-white/60 backdrop-blur-md dark:bg-zinc-900/60 p-4 md:p-6 rounded-3xl border border-white/20 shadow-sm md:shadow-xl">
-            <div className="border-b border-gray-100 pb-4 dark:border-gray-800 text-center lg:text-start">
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-gray-100 leading-tight">
+          <aside className="lg:sticky lg:top-24 flex flex-col gap-6 h-fit bg-white/60 backdrop-blur-md  p-4 md:p-6 rounded-3xl border border-white/20 shadow-sm md:shadow-xl">
+            <div className="border-b border-gray-100 pb-4  text-center lg:text-start">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900  leading-tight">
                 {product?.name}
               </h1>
 
@@ -389,7 +389,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
               {typedProduct?.sizes && typedProduct.sizes.length > 0 && (
                 <div className=" duration-500 delay-100">
                   <div className="flex justify-between items-center mb-3 px-1">
-                    <span className="font-semibold text-gray-800 dark:text-gray-200">
+                    <span className="font-semibold text-gray-800 ">
                       {tHomeProducts("size")}
                     </span>
                     <span className="text-sm text-primary font-medium uppercase tracking-wider">
@@ -415,7 +415,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
                               : "hover:border-primary/50 hover:bg-primary/5",
                             selectedSize === item.sizeValue
                               ? "border-primary bg-primary/10 text-primary shadow-sm scale-110"
-                              : "border-gray-200 bg-white"
+                              : "border-gray-200 bg-white",
                           )}
                         >
                           <RadioGroupItem
@@ -441,7 +441,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
               {colorsForSelectedSize.length > 0 && (
                 <div className=" duration-500 delay-200">
                   <div className="flex justify-between items-center mb-3 px-1">
-                    <span className="font-semibold text-gray-800 dark:text-gray-200">
+                    <span className="font-semibold text-gray-800 ">
                       {tHomeProducts("colors")}
                     </span>
                     {selectedColor && (
@@ -473,7 +473,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
                                     : "hover:scale-110",
                                   selectedColor === item.hex
                                     ? "ring-2 ring-offset-2 ring-primary"
-                                    : "ring-1 ring-transparent"
+                                    : "ring-1 ring-transparent",
                                 )}
                               >
                                 <RadioGroupItem
@@ -503,8 +503,8 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
                 </div>
               )}
 
-              <div className=" duration-500 delay-300 flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-4">
-                <span className="font-semibold text-gray-800 dark:text-gray-200">
+              <div className=" duration-500 delay-300 flex items-center justify-between border-t border-gray-100  pt-4">
+                <span className="font-semibold text-gray-800 ">
                   {tHomeProducts("quantity")}
                 </span>
                 <QuantitySelector
@@ -532,7 +532,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
                         AddToList(
                           typedProduct as Product,
                           selectedSize,
-                          selectedColor
+                          selectedColor,
                         )
                       }
                       disabled={loadingBuy}
@@ -554,7 +554,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
                           "h-12 w-12 md:h-14 md:w-14 rounded-full border-2 transition-all hover:scale-105 active:scale-95 shrink-0",
                           isExistInWish
                             ? "border-red-200 bg-red-50 text-red-500 hover:bg-red-100"
-                            : "border-gray-200 hover:border-gray-300"
+                            : "border-gray-200 hover:border-gray-300",
                         )}
                       >
                         {isExistInWish ? (
@@ -570,7 +570,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
                     variant="secondary"
                     onClick={handleBuyItNow}
                     disabled={loadingBuy}
-                    className="w-full h-12 md:h-14 rounded-full text-base md:text-lg font-bold bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 shadow-xl transition-all hover:-translate-y-1"
+                    className="w-full h-12 md:h-14 rounded-full text-base md:text-lg font-bold bg-zinc-900 text-white hover:bg-zinc-800  shadow-xl transition-all hover:-translate-y-1"
                   >
                     {loadingBuy ? <MainLoading /> : tHomeProducts("buyItBtn")}
                   </Button>
@@ -582,9 +582,9 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
 
             <div className="text-sm text-gray-500 space-y-4 pt-2">
               {(description || tHomeProducts("descPro")) && (
-                <div className="bg-gray-50 dark:bg-zinc-800/50 p-4 rounded-2xl border border-dashed border-gray-200">
+                <div className="bg-gray-50  p-4 rounded-2xl border border-dashed border-gray-200">
                   {tHomeProducts("descPro")?.trim() && (
-                    <div className="flex items-center gap-2 mb-2 font-medium text-gray-900 dark:text-gray-100">
+                    <div className="flex items-center gap-2 mb-2 font-medium text-gray-900 ">
                       <Text size={16} />
                       <span>{tHomeProducts("descPro")}</span>
                     </div>
