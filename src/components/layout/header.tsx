@@ -93,6 +93,8 @@ const Header = () => {
                   if (typeof window !== "undefined" && link.url === "/store") {
                     if (link.storeCategory === "hot") {
                       sessionStorage.setItem("selectedStoreCategory", "hot");
+                    } else if (link.storeCategory === "new") {
+                      sessionStorage.setItem("selectedStoreCategory", "new");
                     } else {
                       sessionStorage.removeItem("selectedStoreCategory");
                     }

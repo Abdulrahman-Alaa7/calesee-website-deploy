@@ -91,6 +91,8 @@ const MoreHeader = () => {
     if (typeof window !== "undefined" && item.href === "/store") {
       if (item.storeCategory === "hot") {
         sessionStorage.setItem("selectedStoreCategory", "hot");
+      } else if (item.storeCategory === "new") {
+        sessionStorage.setItem("selectedStoreCategory", "new");
       } else {
         sessionStorage.removeItem("selectedStoreCategory");
       }

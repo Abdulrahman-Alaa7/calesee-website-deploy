@@ -151,6 +151,11 @@ const Footer = () => {
                       } else {
                         sessionStorage.removeItem("selectedStoreCategory");
                       }
+                      if (link.type === "new") {
+                        sessionStorage.setItem("selectedStoreCategory", "new");
+                      } else {
+                        sessionStorage.removeItem("selectedStoreCategory");
+                      }
                     }
                   }}
                   className="w-fit mx-auto md:mx-0 hover:underline hover:underline-offset-4 text-[#666] leading-loose text-[14px]  hover:text-primary  transition-all duration-300"
