@@ -4,6 +4,7 @@ import SecHeroImg from "../../../public/assets/images/secHero.jpg";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
+import { trackEvent } from "@/utils/trackEvent";
 
 const SecHero = () => {
   const t = useTranslations("SecHero");
@@ -55,6 +56,12 @@ const SecHero = () => {
 
           <Link
             href={`/store`}
+            onClick={() => {
+              trackEvent({
+                event: "explore_collection_click",
+                source: "landing_page",
+              });
+            }}
             className="mt-4 w-fit mx-auto lg:mx-0 bg-[#a8603a] hover:bg-[#947268] text-white font-bold py-5 px-8 rounded-full shadow-lg transition duration-300"
           >
             {isArabic ? "اكتشف مجموعتنا" : "Explore Our Collection"}

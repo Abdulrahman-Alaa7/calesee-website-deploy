@@ -218,18 +218,18 @@ export default function FiltersPanel({
                 </h5>
                 <div className="grid grid-cols-2 gap-2">
                   <Button
+                    variant={selectedCategory === "hot" ? "default" : "outline"}
+                    onClick={() => setSelectedCategory("hot")}
+                  >
+                    {t("whatHot")}
+                  </Button>
+                  <Button
                     variant={selectedCategory === "new" ? "default" : "outline"}
                     onClick={() => setSelectedCategory("new")}
                   >
                     {t("newArrive")}
                   </Button>
 
-                  <Button
-                    variant={selectedCategory === "hot" ? "default" : "outline"}
-                    onClick={() => setSelectedCategory("hot")}
-                  >
-                    {t("whatHot")}
-                  </Button>
 
                   {categories.map((c) => (
                     <Button

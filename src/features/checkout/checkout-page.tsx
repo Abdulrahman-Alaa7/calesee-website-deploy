@@ -50,6 +50,8 @@ import { GET_SETTINGS } from "@/graphql/actions/queries/getSettings";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { Settings } from "@/types/landing.types";
 import { CREATE_ORDER } from "@/graphql/actions/mutations/CreateOrder";
+import { trackEvent } from "@/utils/trackEvent";
+import { hashValue } from "@/utils/hash";
 
 interface SettingsData {
   getSettings: Settings[];
@@ -244,6 +246,24 @@ const CheckoutPage = () => {
           variables: {
             input: NewData,
           },
+        });
+
+        const emailHash = await hashValue(data.email);
+        const phoneHash = await hashValue(data.phone_number);
+
+        trackEvent({
+          event: "purchase",
+          order_id: Date.now().toString(),
+          email_hash: emailHash,
+          phone_hash: phoneHash,
+          value:
+            freeShippingPrice && sumPrice(order) > freeShippingPrice
+              ? sumPrice(order)
+              : shippingPrice
+                ? sumPrice(order) + shippingPrice
+                : sumPrice(order),
+          currency: "EGP",
+          item_count: order.length,
         });
         form.reset();
         toast.success(`${tCheckout("successSend")}`);

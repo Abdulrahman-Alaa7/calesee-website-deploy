@@ -33,6 +33,7 @@ import type { Product } from "@/types/product.types";
 import { getOptionValue, isOptionSoldOut } from "../shared/utils";
 import { isShippingItem, ProductsHomeProps } from "../shared/types";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
+import { trackEvent } from "@/utils/trackEvent";
 
 export const ProductsHome = ({
   product,
@@ -174,6 +175,20 @@ export const ProductsHome = ({
   const AddToList = useCallback(
     (item: Product, size: string, color?: string) => {
       handleAddNewItemShipping(item, displayedQuantity, size, color ?? "");
+
+      trackEvent({
+        event: "add_to_cart",
+        product_id: item.id,
+        product_name: item.name,
+        price: Number(
+          item.estimatedPrice && item.estimatedPrice > 0
+            ? item.estimatedPrice
+            : item.price,
+        ),
+        quantity: displayedQuantity,
+        currency: "EGP",
+      });
+
       toast.success(tS("successAddedBag"));
       setDisplayedQuantity(1);
     },
@@ -233,6 +248,17 @@ export const ProductsHome = ({
     }
     setLoadingBuy(true);
     AddToList(p, size, color);
+
+    trackEvent({
+      event: "buy_now_click",
+      product_id: p.id,
+      product_name: p.name,
+      price: Number(
+        p.estimatedPrice && p.estimatedPrice > 0 ? p.estimatedPrice : p.price,
+      ),
+      currency: "EGP",
+    });
+
     router.push("/checkout");
     setLoadingBuy(false);
   };
@@ -407,7 +433,23 @@ export const ProductsHome = ({
 
       {!isShipItem && typedProduct && isQuickCard && (
         <Dialog>
-          <DialogTrigger className="absolute cursor-pointer bg-primary py-2.5 text-white hover:opacity-80 transition-all bottom-2.5 left-1/2 transform -translate-x-1/2 z-40 w-[230px] rounded-full mx-auto flex justify-center items-center">
+          <DialogTrigger
+            onClick={() =>
+              trackEvent({
+                event: "quick_view",
+                product_id: product.id,
+                product_name: product.name,
+                price: Number(
+                  product.estimatedPrice && product.estimatedPrice > 0
+                    ? product.estimatedPrice
+                    : product.price,
+                ),
+                currency: "EGP",
+                source: "product_card_popup",
+              })
+            }
+            className="absolute cursor-pointer bg-primary py-2.5 text-white hover:opacity-80 transition-all bottom-2.5 left-1/2 transform -translate-x-1/2 z-40 w-[230px] rounded-full mx-auto flex justify-center items-center"
+          >
             {t("QuickView")}
           </DialogTrigger>
 

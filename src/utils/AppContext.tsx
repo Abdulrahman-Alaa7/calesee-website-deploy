@@ -6,6 +6,7 @@ import type {
   ShippingItem,
   WishingItem,
 } from "../types/product.types";
+import { trackEvent } from "./trackEvent";
 
 type LoadingStates = {
   fetching: boolean;
@@ -23,7 +24,7 @@ type AppContextType = {
     item: Product,
     quantity: number,
     size: string,
-    color: string
+    color: string,
   ) => void;
   handleDeleteItemShipping: (id: string, size?: string, color?: string) => void;
   handleDeleteAllShippingList: () => void;
@@ -31,7 +32,7 @@ type AppContextType = {
     id: string,
     quantity: number,
     size?: string,
-    color?: string
+    color?: string,
   ) => void;
 
   handleAddToWishingList: (item: Product) => void;
@@ -83,14 +84,14 @@ export const AppStorage = ({ children }: Props) => {
     item: Product,
     quantity: number,
     size: string,
-    color: string
+    color: string,
   ) => {
     setLoadingStates((s) => ({ ...s, adding: true }));
 
     setShippingList((prev) => {
       const updated = [...prev];
       const index = updated.findIndex(
-        (p) => p.id === item.id && p.size === size && p.color === color
+        (p) => p.id === item.id && p.size === size && p.color === color,
       );
 
       if (index === -1) {
@@ -122,12 +123,14 @@ export const AppStorage = ({ children }: Props) => {
   const handleDeleteItemShipping = (
     id: string,
     size?: string,
-    color?: string
+    color?: string,
   ) => {
     setLoadingStates((s) => ({ ...s, deleting: true }));
 
     setShippingList((prev) =>
-      prev.filter((p) => !(p.id === id && p.size === size && p.color === color))
+      prev.filter(
+        (p) => !(p.id === id && p.size === size && p.color === color),
+      ),
     );
 
     setLoadingStates((s) => ({ ...s, deleting: false }));
@@ -143,14 +146,14 @@ export const AppStorage = ({ children }: Props) => {
     id: string,
     quantity: number,
     size?: string,
-    color?: string
+    color?: string,
   ) => {
     setLoadingStates((s) => ({ ...s, adding: true }));
 
     setShippingList((prev) => {
       const updated = [...prev];
       const index = updated.findIndex(
-        (p) => p.id === id && p.size === size && p.color === color
+        (p) => p.id === id && p.size === size && p.color === color,
       );
 
       if (index !== -1) {
@@ -180,6 +183,18 @@ export const AppStorage = ({ children }: Props) => {
               : item.price,
         },
       ];
+    });
+
+    trackEvent({
+      event: "add_to_wishlist",
+      product_id: item.id,
+      product_name: item.name,
+      price: Number(
+        item.estimatedPrice && item.estimatedPrice > 0
+          ? item.estimatedPrice
+          : item.price,
+      ),
+      currency: "EGP",
     });
 
     setLoadingStates((s) => ({ ...s, adding: false }));

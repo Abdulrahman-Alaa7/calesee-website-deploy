@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { Settings, Slides } from "@/types/landing.types";
+import { trackEvent } from "@/utils/trackEvent";
 
 type Props = {
   slides: Slides[];
@@ -31,7 +32,7 @@ export default function Hero({ slides, settings }: Props) {
     Autoplay({
       delay: 7000,
       stopOnInteraction: false,
-    })
+    }),
   );
 
   const [carouselApi, setCarouselApi] = React.useState<CarouselApi>();
@@ -100,6 +101,12 @@ export default function Hero({ slides, settings }: Props) {
 
                 <Link
                   href={slide.link}
+                  onClick={() => {
+                    trackEvent({
+                      event: "hero_click_button",
+                      source: "hero_section",
+                    });
+                  }}
                   className="bg-[#a8603a] hover:bg-[#947268]/90 text-white font-semibold text-lg px-10 py-4 rounded-full shadow-md transition-all duration-300 hover:scale-105 animate-slidein opacity-0 [--slidein-delay:800ms]"
                 >
                   {isArabic ? slide.linkTitleAr : slide.linkTitleEn}

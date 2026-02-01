@@ -15,6 +15,7 @@ import { ListFilter, Rows3, Rows2, List } from "lucide-react";
 import type { Product } from "@/types/product.types";
 import { ColorType, SizeType } from "@/types/store.types";
 import { CategoryType } from "@/types/categories.types";
+import { trackEvent } from "@/utils/trackEvent";
 
 type StorePageProps = {
   products: Product[];
@@ -86,6 +87,13 @@ export default function StorePage({
     setFilteredProducts(products);
     setCurrentPage(1);
   }, [products]);
+
+  useEffect(() => {
+    trackEvent({
+      event: "view_content",
+      source: "store_page",
+    });
+  }, []);
 
   const applyFilters = useCallback(() => {
     const baseList =

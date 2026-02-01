@@ -35,6 +35,7 @@ import {
   SheetTrigger,
 } from "../../components/ui/sheet";
 import { ShippingItem } from "@/types/product.types";
+import { trackEvent } from "@/utils/trackEvent";
 
 const NotiShipping = dynamic(() => import("./noti-shipping"));
 
@@ -64,7 +65,7 @@ const ShippingListMenu = () => {
 
   const handleIncrease = (id: string, size?: string, color?: string) => {
     const currentItem = shippingList.find(
-      (item) => item.id === id && item.size === size && item.color === color
+      (item) => item.id === id && item.size === size && item.color === color,
     );
     if (currentItem) {
       const newQuantity = currentItem.quantity + 1;
@@ -74,7 +75,7 @@ const ShippingListMenu = () => {
 
   const handleDecrease = (id: string, size?: string, color?: string) => {
     const currentItem = shippingList.find(
-      (item) => item.id === id && item.size === size && item.color === color
+      (item) => item.id === id && item.size === size && item.color === color,
     );
     if (currentItem && currentItem.quantity > 1) {
       const newQuantity = currentItem.quantity - 1;
@@ -226,7 +227,7 @@ const ShippingListMenu = () => {
                                 handleDeleteItemShipping(
                                   el.id,
                                   el?.size,
-                                  el?.color
+                                  el?.color,
                                 )
                               }
                             >
@@ -267,7 +268,13 @@ const ShippingListMenu = () => {
                   <Link
                     href={`/checkout`}
                     className=" h-10 px-4 py-2 rounded-3xl shadow-md inline-flex justify-center items-center whitespace-nowrap  bg-primary text-primary-foreground hover:bg-primary/90 text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-                    onClick={handleLinkClick}
+                    onClick={() => {
+                      handleLinkClick();
+                      trackEvent({
+                        event: "begin_checkout",
+                        source: "header_cart",
+                      });
+                    }}
                   >
                     {tHeader("checkoutBtn")}
                   </Link>

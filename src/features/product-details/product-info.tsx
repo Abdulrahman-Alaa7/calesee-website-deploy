@@ -35,6 +35,7 @@ import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { cn } from "@/lib/utils";
 import ShareButtons from "../shared/share-buttons";
 import SugProductsList from "./sug-products-list";
+import { trackEvent } from "@/utils/trackEvent";
 
 const SectionContainer: React.FC<{
   children: React.ReactNode;
@@ -277,6 +278,20 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
         return;
       }
       handleAddNewItemShipping(item, displayedQuantity, size, color ?? "");
+
+      trackEvent({
+        event: "add_to_cart",
+        product_id: item.id,
+        product_name: item.name,
+        price: Number(
+          item.estimatedPrice && item.estimatedPrice > 0
+            ? item.estimatedPrice
+            : item.price,
+        ),
+        quantity: displayedQuantity,
+        currency: "EGP",
+      });
+
       toast.success(tHeader("successAddedBag"));
       setDisplayedQuantity(1);
     },
@@ -308,6 +323,17 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
   const handleBuyItNow = () => {
     setLoadingBuy(true);
     AddToList(typedProduct as Product, selectedSize, selectedColor);
+    trackEvent({
+      event: "buy_now_click",
+      product_id: product.id,
+      product_name: product.name,
+      price: Number(
+        product.estimatedPrice && product.estimatedPrice > 0
+          ? product.estimatedPrice
+          : product.price,
+      ),
+      currency: "EGP",
+    });
     router.push("/checkout");
     setLoadingBuy(false);
   };
@@ -318,6 +344,23 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
       ? (typedProduct.descriptionAr ?? "")
       : (typedProduct.descriptionEn ?? "");
   }, [typedProduct, lang]);
+
+  useEffect(() => {
+    if (!product) return;
+
+    trackEvent({
+      event: "view_content",
+      product_id: product.id,
+      product_name: product.name,
+      price: Number(
+        product.estimatedPrice && product.estimatedPrice > 0
+          ? product.estimatedPrice
+          : product.price,
+      ),
+      currency: "EGP",
+      source: "product_page",
+    });
+  }, [product]);
 
   return (
     <div

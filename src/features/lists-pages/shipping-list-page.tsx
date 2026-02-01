@@ -8,6 +8,7 @@ import { Badge } from "../../components/ui/badge";
 import MainBtn from "../../components/ui/main-button";
 import { TbShoppingBagX } from "react-icons/tb";
 import { ShippingItem } from "@/types/product.types";
+import { trackEvent } from "@/utils/trackEvent";
 
 const ShippingListPage = () => {
   const tHeader = useTranslations("AllHeader");
@@ -35,7 +36,16 @@ const ShippingListPage = () => {
               {tHeader("payInFull")} : {sumPrice(shippingList)} {"  "}
               {tHeader("pound")}
             </p>
-            <Link href={`/checkout`} className="">
+            <Link
+              href={`/checkout`}
+              className=""
+              onClick={() =>
+                trackEvent({
+                  event: "begin_checkout",
+                  source: "cart_page",
+                })
+              }
+            >
               <Badge
                 variant={`outline`}
                 className="font-normal py-3 md:py-4 text-white text-[18px] bg-[#a8603a] hover:bg-[#947268] rounded-full hover:text-white w-[250px] flex justify-center items-center"
