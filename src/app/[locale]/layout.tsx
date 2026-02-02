@@ -44,6 +44,12 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={`${locale === "ar" ? `rtl` : `ltr`}`}>
+      <head>
+        <meta
+          name="facebook-domain-verification"
+          content="5cu4a7gq0gn7su6km8j9frsow53xdw"
+        />
+      </head>
       {GTM_ID && (
         <Script
           id="gtm-script"
