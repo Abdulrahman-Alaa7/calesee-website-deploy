@@ -143,12 +143,11 @@ const CheckoutPage = () => {
   const checkOutSchema = z.object({
     email: z
       .string()
-      .min(1, {
-        message: `${tCheckout("validEmailMin")}`,
-      })
       .email({
         message: `${tCheckout("validEmailValid")}`,
-      }),
+      })
+      .or(z.literal(""))
+      .optional(),
     phone_number: z
       .string()
       .min(11, {
@@ -229,7 +228,7 @@ const CheckoutPage = () => {
               quantity: item.quantity,
             };
           }),
-          email: data.email,
+          ...(data.email && { email: data.email }),
           phone_number: data.phone_number,
           secPhone_number: data.secPhone_number,
           fullName: data.fullName,
@@ -248,7 +247,7 @@ const CheckoutPage = () => {
           },
         });
 
-        const emailHash = await hashValue(data.email);
+        const emailHash = await hashValue(data.email ? data.email : "");
         const phoneHash = await hashValue(data.phone_number);
 
         trackEvent({
@@ -273,6 +272,7 @@ const CheckoutPage = () => {
         toast.error(`${tHeader("shippingListTitle")}`);
       }
     } catch (error) {
+      console.log("Error submitting order:", error); // Debug log
       console.error(error);
       toast.error(`${tHomeProducts("msgError")}`);
     }
@@ -325,7 +325,7 @@ const CheckoutPage = () => {
                               <FormLabel>{tCheckout("emailInput")}</FormLabel>
                               <FormControl>
                                 <Input
-                                  placeholder={`${tCheckout("emailInput")}`}
+                                  placeholder={`${tCheckout("emailInputText")}`}
                                   {...field}
                                   className="py-6 px-4 rounded-full"
                                   disabled={

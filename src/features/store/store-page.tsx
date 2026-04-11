@@ -16,6 +16,8 @@ import type { Product } from "@/types/product.types";
 import { ColorType, SizeType } from "@/types/store.types";
 import { CategoryType } from "@/types/categories.types";
 import { trackEvent } from "@/utils/trackEvent";
+import { generateSlug } from "@/utils/generateSlug";
+import ProductSkeleton from "./product-skeleton";
 
 type StorePageProps = {
   products: Product[];
@@ -36,7 +38,7 @@ export default function StorePage({
   const locale = useLocale();
 
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
-
+  const [isLoading, setIsLoading] = useState(true);
   const [priceRange, setPriceRange] = useState<number[]>([0, 2000]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
@@ -44,14 +46,20 @@ export default function StorePage({
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const stored = sessionStorage.getItem("selectedStoreCategory");
-      if (stored) {
-        setSelectedCategory(stored);
-        sessionStorage.removeItem("selectedStoreCategory");
+      const params = new URLSearchParams(window.location.search);
+      const categorySlug = params.get("category");
+
+      if (categorySlug) {
+        const matchedCategory = categories.find(
+          (c) => generateSlug(c.nameEn) === categorySlug,
+        );
+
+        if (matchedCategory) {
+          setSelectedCategory(matchedCategory.id);
+        }
       }
     }
-  }, []);
-
+  }, [categories]);
   const [viewMode, setViewMode] = useState<
     "grid-large" | "grid-compact" | "list"
   >("grid-large");
@@ -73,6 +81,7 @@ export default function StorePage({
   useEffect(() => {
     if (!products.length) {
       setPriceRange([0, 0]);
+      setIsLoading(false);
       return;
     }
 
@@ -86,6 +95,8 @@ export default function StorePage({
     setPriceRange([minPrice, maxPrice]);
     setFilteredProducts(products);
     setCurrentPage(1);
+
+    setIsLoading(false);
   }, [products]);
 
   useEffect(() => {
@@ -267,7 +278,7 @@ export default function StorePage({
           availableSizes={sizes}
         />
 
-        <main className="flex flex-col">
+        <main className="flex flex-col min-h-[60vh]">
           <div className="flex items-center justify-between gap-4 mb-6">
             <div className="text-sm text-gray-600">
               {filteredProducts.length} {t("productsNum")}
@@ -370,7 +381,13 @@ export default function StorePage({
             </div>
           </div>
 
-          {filteredProducts.length > 0 ? (
+          {isLoading ? (
+            <div className="grid gap-6 grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <ProductSkeleton key={i} />
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
             <div
               className={`grid gap-6 ${
                 viewMode === "grid-large"

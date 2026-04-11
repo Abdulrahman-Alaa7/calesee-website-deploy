@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next";
 import { getClient } from "@/lib/apollo-rsc";
 import { GET_RECENT_PRODUCTS } from "@/graphql/actions/queries/products/getAllRecentProducts";
+import { generateSlug } from "@/utils/generateSlug";
 
 const locales = ["ar", "en"] as const;
 
 type ProductForSitemap = {
   id: string;
+  name: string;
   updatedAt: string;
 };
 
@@ -35,7 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: "weekly",
         priority: path === "" ? 1 : 0.7,
       };
-    })
+    }),
   );
 
   const client = getClient();
@@ -47,13 +49,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const productRoutes: MetadataRoute.Sitemap = products.flatMap((product) =>
     locales.map((locale) => ({
-      url: `${baseUrl}/${locale}/store/${product.id}`,
+      url: `${baseUrl}/${locale}/store/${generateSlug(product.name)}-${product.id}`,
       lastModified: product.updatedAt
         ? new Date(product.updatedAt)
         : new Date(),
       changeFrequency: "weekly",
-      priority: 0.8,
-    }))
+      priority: 0.6,
+    })),
   );
 
   return [...staticRoutes, ...productRoutes];

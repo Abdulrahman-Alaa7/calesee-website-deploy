@@ -10,6 +10,9 @@ import { DialogTitle } from "@/components/ui/dialog";
 import { useLocale, useTranslations } from "next-intl";
 import { ColorType, SizeType } from "@/types/store.types";
 import { CategoryType } from "@/types/categories.types";
+import { useRouter } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
+import { generateSlug } from "@/utils/generateSlug";
 
 interface Props {
   products: Product[];
@@ -44,6 +47,16 @@ export default function FiltersPanel({
 }: Props) {
   const lang = useLocale();
   const t = useTranslations("HomeProducts");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const updateUrl = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    params.set(key, value);
+
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   const min = useMemo(() => {
     if (!products.length) return 0;
@@ -111,13 +124,19 @@ export default function FiltersPanel({
           <div className="grid grid-cols-2 gap-2">
             <Button
               variant={selectedCategory === "hot" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("hot")}
+              onClick={() => {
+                setSelectedCategory("hot");
+                updateUrl("category", "hot");
+              }}
             >
               {t("whatHot")}
             </Button>
             <Button
               variant={selectedCategory === "new" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("new")}
+              onClick={() => {
+                setSelectedCategory("new");
+                updateUrl("category", "new");
+              }}
             >
               {t("newArrive")}
             </Button>
@@ -126,7 +145,10 @@ export default function FiltersPanel({
               <Button
                 key={c.id}
                 variant={selectedCategory === c.id ? "default" : "outline"}
-                onClick={() => setSelectedCategory(c.id)}
+                onClick={() => {
+                  setSelectedCategory(c.id);
+                  updateUrl("category", generateSlug(c.nameEn));
+                }}
               >
                 {getCategoryLabel(c)}
               </Button>
@@ -229,7 +251,6 @@ export default function FiltersPanel({
                   >
                     {t("newArrive")}
                   </Button>
-
 
                   {categories.map((c) => (
                     <Button

@@ -36,6 +36,7 @@ import {
 } from "../../components/ui/sheet";
 import { ShippingItem } from "@/types/product.types";
 import { trackEvent } from "@/utils/trackEvent";
+import { generateSlug } from "@/utils/generateSlug";
 
 const NotiShipping = dynamic(() => import("./noti-shipping"));
 
@@ -125,7 +126,10 @@ const ShippingListMenu = () => {
                 {shippingList?.map((el, index: number) => (
                   <TableRow key={index} className="">
                     <TableCell className="font-medium flex gap-3 items-center">
-                      <Link href={`/store/${el.id}`} onClick={handleLinkClick}>
+                      <Link
+                        href={`/store/${generateSlug(el.name)}-${el.id}`}
+                        onClick={handleLinkClick}
+                      >
                         <Image
                           src={el.mainImage}
                           alt={el.name}
@@ -136,7 +140,7 @@ const ShippingListMenu = () => {
                       </Link>
                       <p className="flex flex-col">
                         <Link
-                          href={`/store/${el.id}`}
+                          href={`/store/${generateSlug(el.name)}-${el.id}`}
                           className="hover:underline hover:underline-offset-4 transition-all"
                           onClick={handleLinkClick}
                         >

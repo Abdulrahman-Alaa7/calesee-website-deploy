@@ -1,6 +1,7 @@
 "use client";
 import { Link } from "@/i18n/routing";
 import { CategoryType } from "@/types/categories.types";
+import { generateSlug } from "@/utils/generateSlug";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -40,13 +41,8 @@ export default function CategoriesSection({ categories }: Props) {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {visibleCategories.map((category: CategoryType) => (
           <Link
-            href={`/store`}
+            href={`/store?category=${generateSlug(category.nameEn)}`}
             key={category.id}
-            onClick={() => {
-              if (typeof window !== "undefined") {
-                sessionStorage.setItem("selectedStoreCategory", category.id);
-              }
-            }}
             className="group relative overflow-hidden rounded-3xl shadow-md bg-white hover:shadow-xl transition-all duration-300 cursor-pointer"
           >
             <div className="relative w-full h-52 overflow-hidden rounded-3xl">

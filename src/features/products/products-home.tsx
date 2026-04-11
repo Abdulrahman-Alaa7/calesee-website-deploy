@@ -34,6 +34,7 @@ import { getOptionValue, isOptionSoldOut } from "../shared/utils";
 import { isShippingItem, ProductsHomeProps } from "../shared/types";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { trackEvent } from "@/utils/trackEvent";
+import { generateSlug } from "@/utils/generateSlug";
 
 export const ProductsHome = ({
   product,
@@ -334,7 +335,7 @@ export const ProductsHome = ({
       )}
 
       <Link
-        href={`/store/${product?.id}`}
+        href={`/store/${generateSlug(product.name)}-${product.id}`}
         onMouseEnter={() => setHoverImage(true)}
         onMouseLeave={() => setHoverImage(false)}
         className={`w-full h-full ${
@@ -676,7 +677,7 @@ export const ProductsHome = ({
               )}
 
               <Link
-                href={`/store/${product.id}`}
+                href={`/store/${generateSlug(product.name)}-${product.id}`}
                 className="mx-auto rounded-full py-2 px-4 w-fit text-black underline underline-offset-4 !z-30 mb-3 lg:mb-0 hover:opacity-90 flex justify-center items-center gap-1"
               >
                 {t("allDetails")}
