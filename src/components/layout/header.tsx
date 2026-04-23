@@ -37,12 +37,12 @@ const Header = () => {
       storeCategory: null,
     },
     {
-      url: "/store",
+      url: "/store?category=new",
       text: `${tFooter("footLinkNew")}`,
       storeCategory: "new",
     },
     {
-      url: "/store",
+      url: "/store?category=hot",
       text: `${tFooter("footLinkHot")}`,
       storeCategory: "hot",
     },
@@ -89,17 +89,6 @@ const Header = () => {
                 key={index}
                 className="inline-block px-4 py-2 text-xs xl:text-sm 2xl:text-base rounded-3xl text-gray-900  transition-all duration-200 hover:bg-secondary hover:text-gray-900"
                 href={link.url}
-                onClick={() => {
-                  if (typeof window !== "undefined" && link.url === "/store") {
-                    if (link.storeCategory === "hot") {
-                      sessionStorage.setItem("selectedStoreCategory", "hot");
-                    } else if (link.storeCategory === "new") {
-                      sessionStorage.setItem("selectedStoreCategory", "new");
-                    } else {
-                      sessionStorage.removeItem("selectedStoreCategory");
-                    }
-                  }
-                }}
               >
                 {link.text}
               </Link>

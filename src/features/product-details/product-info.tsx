@@ -30,12 +30,13 @@ import {
 } from "./image-box/gallery";
 import { ProductProvider } from "./image-box/product-context";
 import { isShippingItem } from "../shared/types";
-import type { Product, ShippingItem } from "@/types/product.types";
+import type { Product, Review, ShippingItem } from "@/types/product.types";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { cn } from "@/lib/utils";
 import ShareButtons from "../shared/share-buttons";
 import SugProductsList from "./sug-products-list";
 import { trackEvent } from "@/utils/trackEvent";
+import ReviewSection from "./review-section";
 
 const SectionContainer: React.FC<{
   children: React.ReactNode;
@@ -164,6 +165,10 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
   const [displayedQuantity, setDisplayedQuantity] = useState<number>(1);
   const [galleryController, setGalleryController] =
     useState<GalleryController | null>(null);
+
+  const Reviews: Review[] = typedProduct ? typedProduct.reviews || [] : [];
+
+  console.log(Reviews);
 
   const mainImage = useMemo<GalleryImage>(() => {
     if (isShipItem) {
@@ -644,6 +649,7 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
           </aside>
         </div>
       </SectionContainer>
+      {typedProduct && <ReviewSection product={typedProduct} />}
       <SugProductsList SugProducts={relatedProducts} />
     </div>
   );

@@ -47,7 +47,8 @@ import MainLoading from "../../components/ui/main-loading";
 import { checkoutCities, checkoutGov } from "@/types/checkouy.types";
 import { ShippingItem } from "@/types/product.types";
 import { GET_SETTINGS } from "@/graphql/actions/queries/getSettings";
-import { useMutation, useQuery } from "@apollo/client/react";
+import { GET_SHIPPING_PRICE } from "@/graphql/actions/queries/getShippingPrice";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react";
 import { Settings } from "@/types/landing.types";
 import { CREATE_ORDER } from "@/graphql/actions/mutations/CreateOrder";
 import { trackEvent } from "@/utils/trackEvent";
@@ -55,6 +56,12 @@ import { hashValue } from "@/utils/hash";
 
 interface SettingsData {
   getSettings: Settings[];
+}
+
+interface ShippingPriceData {
+  getShippingPrice: {
+    price: number;
+  };
 }
 
 const CheckoutPage = () => {
@@ -65,8 +72,16 @@ const CheckoutPage = () => {
     useQuery<SettingsData>(GET_SETTINGS);
 
   const settings = settingsData?.getSettings[0];
-  const shippingPrice = settings?.shippingPrice;
-  const freeShippingPrice = settings?.freeShippingPrice;
+  const defaultShippingPrice = settings?.defaultShippingPrice ?? 0;
+  const freeShippingPrice = settings?.freeShippingPrice ?? 0;
+
+  const [
+    fetchShippingPrice,
+    { data: shippingPriceData, loading: shippingPriceLoading },
+  ] = useLazyQuery<ShippingPriceData>(GET_SHIPPING_PRICE);
+
+  const shippingPrice: number =
+    shippingPriceData?.getShippingPrice?.price ?? defaultShippingPrice;
 
   const lang = useLocale();
   const tHeader = useTranslations("AllHeader");
@@ -74,7 +89,6 @@ const CheckoutPage = () => {
   const tCheckout = useTranslations("CheckOut");
 
   const [selectedGovernorate, setSelectedGovernorate] = useState("");
-  const [selectedSecGovernorate, setSelectedSecGovernorate] = useState("");
   const [showPhoneTwo, setShowPhoneTwo] = useState<boolean>(false);
   const [showAddresssTwo, setShowAddresssTwo] = useState<boolean>(false);
   const [, setOpen] = useState(false);
@@ -119,13 +133,6 @@ const CheckoutPage = () => {
     "city_name_en",
     lang,
   );
-  const filteredSecCities = sortDataByLocale<checkoutCities>(
-    cit.filter((city) => city.governorate_id === selectedSecGovernorate),
-    "city_name_ar",
-    "city_name_en",
-    lang,
-  );
-
   const defaultValues = {
     email: "",
     phone_number: "",
@@ -135,8 +142,6 @@ const CheckoutPage = () => {
     governorate: "",
     city: "",
     secAddress: "",
-    secGovernorate: "",
-    secCity: "",
     note: "",
   };
 
@@ -195,8 +200,6 @@ const CheckoutPage = () => {
         message: `${tCheckout("validCityMax")}`,
       }),
     secAddress: z.string().optional(),
-    secGovernorate: z.string().optional(),
-    secCity: z.string().optional(),
     note: z
       .string()
       .max(250, {
@@ -236,8 +239,6 @@ const CheckoutPage = () => {
           governorate: data.governorate,
           city: data.city,
           secAddress: data.secAddress,
-          secGovernorate: data.secGovernorate,
-          secCity: data.secCity,
           note: data.note,
         };
 
@@ -256,11 +257,9 @@ const CheckoutPage = () => {
           email_hash: emailHash,
           phone_hash: phoneHash,
           value:
-            freeShippingPrice && sumPrice(order) > freeShippingPrice
+            freeShippingPrice && sumPrice(order) >= freeShippingPrice
               ? sumPrice(order)
-              : shippingPrice
-                ? sumPrice(order) + shippingPrice
-                : sumPrice(order),
+              : sumPrice(order) + shippingPrice,
           currency: "EGP",
           item_count: order.length,
         });
@@ -475,14 +474,14 @@ const CheckoutPage = () => {
                                   onValueChange={(value) => {
                                     field.onChange(value);
                                     const selectedGov = gov.find(
-                                      (g) =>
-                                        (lang === "ar"
-                                          ? g.governorate_name_ar
-                                          : g.governorate_name_en) === value,
+                                      (g) => g.governorate_name_en === value,
                                     );
                                     setSelectedGovernorate(
                                       selectedGov ? selectedGov.id : "",
                                     );
+                                    fetchShippingPrice({
+                                      variables: { governorate: value },
+                                    });
                                   }}
                                   defaultValue={field.value}
                                   disabled={
@@ -500,24 +499,20 @@ const CheckoutPage = () => {
                                       />
                                     </SelectTrigger>
                                   </FormControl>
-                                  <SelectContent className="py-2">
-                                    {gov.map((gov, index) => (
+                                  <SelectContent className="py-2 ">
+                                    {gov.map((g, index) => (
                                       <SelectItem
                                         key={index}
-                                        value={
+                                        value={g.governorate_name_en}
+                                        className={`flex flex-col  justify-center py-2 px-4 cursor-pointer ${
                                           lang === "ar"
-                                            ? gov.governorate_name_ar
-                                            : gov.governorate_name_en
-                                        }
-                                        className={`flex flex-col justify-center py-2 px-4 cursor-pointer ${
-                                          lang === "ar"
-                                            ? "items-end"
+                                            ? "items-start"
                                             : "items-start"
                                         } gap-2`}
                                       >
                                         {lang === "ar"
-                                          ? gov.governorate_name_ar
-                                          : gov.governorate_name_en}
+                                          ? g.governorate_name_ar
+                                          : g.governorate_name_en}
                                       </SelectItem>
                                     ))}
                                   </SelectContent>
@@ -561,7 +556,7 @@ const CheckoutPage = () => {
                                         }
                                         className={`flex flex-col justify-center px-4 py-2  cursor-pointer ${
                                           lang === "ar"
-                                            ? "items-end"
+                                            ? " items-start "
                                             : "items-start"
                                         } gap-2`}
                                       >
@@ -611,141 +606,11 @@ const CheckoutPage = () => {
                         </div>
                         {showAddresssTwo && (
                           <div className={`SecAdess fadeIn w-full lg:w-[70%] `}>
-                            <div className="grid grid-cols-1 md:grid-cols-2  gap-3">
-                              <FormField
-                                control={form.control}
-                                name="secGovernorate"
-                                render={({ field }) => (
-                                  <FormItem className="w-full">
-                                    <FormLabel>
-                                      {tCheckout("govTit")} {"  "} (
-                                      {tCheckout("optionalWord")})
-                                    </FormLabel>
-                                    <Select
-                                      onValueChange={(value) => {
-                                        field.onChange(value);
-                                        const selectedSecGov = gov.find(
-                                          (g) =>
-                                            (lang === "ar"
-                                              ? g.governorate_name_ar
-                                              : g.governorate_name_en) ===
-                                            value,
-                                        );
-                                        setSelectedSecGovernorate(
-                                          selectedSecGov
-                                            ? selectedSecGov.id
-                                            : "",
-                                        );
-                                      }}
-                                      defaultValue={field.value}
-                                      disabled={
-                                        getSettingsLoading || createOrderLoading
-                                      }
-                                    >
-                                      <FormControl className="py-6">
-                                        <SelectTrigger
-                                          className={`px-4 rounded-full w-full cursor-pointer ${
-                                            lang === "ar" && "flex-row-reverse"
-                                          }`}
-                                        >
-                                          <SelectValue
-                                            placeholder={`${tCheckout(
-                                              "govPlace",
-                                            )}`}
-                                          />
-                                        </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent className="py-2">
-                                        {gov.map((gov, index) => (
-                                          <SelectItem
-                                            key={`${gov}_${index}`}
-                                            value={
-                                              lang === "ar"
-                                                ? gov.governorate_name_ar
-                                                : gov.governorate_name_en
-                                            }
-                                            className={`flex flex-col justify-center py-2 px-4 cursor-pointer ${
-                                              lang === "ar"
-                                                ? "items-end"
-                                                : "items-start"
-                                            } gap-2`}
-                                          >
-                                            {lang === "ar"
-                                              ? gov.governorate_name_ar
-                                              : gov.governorate_name_en}
-                                          </SelectItem>
-                                        ))}
-                                      </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                              <FormField
-                                control={form.control}
-                                name="secCity"
-                                render={({ field }) => (
-                                  <FormItem className="w-full">
-                                    <FormLabel>
-                                      {tCheckout("cityTit")}
-                                      {"  "} ({tCheckout("optionalWord")})
-                                    </FormLabel>
-                                    <Select
-                                      onValueChange={field.onChange}
-                                      defaultValue={field.value}
-                                      disabled={
-                                        !selectedSecGovernorate ||
-                                        getSettingsLoading ||
-                                        createOrderLoading
-                                      }
-                                    >
-                                      <FormControl className="py-6">
-                                        <SelectTrigger
-                                          className={`px-4 rounded-full w-full cursor-pointer ${
-                                            lang === "ar" && "flex-row-reverse"
-                                          }`}
-                                        >
-                                          <SelectValue
-                                            placeholder={`${tCheckout(
-                                              "cityPlace",
-                                            )}`}
-                                          />
-                                        </SelectTrigger>
-                                      </FormControl>
-                                      <SelectContent className="py-2">
-                                        {filteredSecCities.map(
-                                          (city, index) => (
-                                            <SelectItem
-                                              key={`${city}_${index}`}
-                                              value={
-                                                lang === "ar"
-                                                  ? city.city_name_ar
-                                                  : city.city_name_en
-                                              }
-                                              className={`flex flex-col justify-center py-2 px-4 cursor-pointer ${
-                                                lang === "ar"
-                                                  ? "items-end"
-                                                  : "items-start"
-                                              } gap-2 px-4 rounded-full `}
-                                            >
-                                              {lang === "ar"
-                                                ? city.city_name_ar
-                                                : city.city_name_en}
-                                            </SelectItem>
-                                          ),
-                                        )}
-                                      </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
                             <FormField
                               control={form.control}
                               name="secAddress"
                               render={({ field }) => (
-                                <FormItem className="mt-3">
+                                <FormItem>
                                   <FormLabel>
                                     {tCheckout("addressTit")} {"  "} (
                                     {tCheckout("optionalWord")})
@@ -842,9 +707,15 @@ const CheckoutPage = () => {
                         variant={`default`}
                         type="submit"
                         className="submit-button px-4 py-6 rounded-full md:w-[50%] mx-auto flex justify-center items-center mb-12 mt-8 text-white focus:ring focus:outline-none w-full text-lg font-semibold transition-colors"
-                        disabled={createOrderLoading || getSettingsLoading}
+                        disabled={
+                          createOrderLoading ||
+                          getSettingsLoading ||
+                          shippingPriceLoading
+                        }
                       >
-                        {getSettingsLoading || createOrderLoading ? (
+                        {getSettingsLoading ||
+                        createOrderLoading ||
+                        shippingPriceLoading ? (
                           <MainLoading />
                         ) : (
                           <>
@@ -852,20 +723,18 @@ const CheckoutPage = () => {
                               <>
                                 {tCheckout("placeOrder")}{" "}
                                 {freeShippingPrice &&
-                                sumPrice(order) > freeShippingPrice
+                                sumPrice(order) >= freeShippingPrice
                                   ? sumPrice(order)
-                                  : shippingPrice &&
-                                    sumPrice(order) + shippingPrice}{" "}
+                                  : sumPrice(order) + shippingPrice}{" "}
                                 {tHeader("pound")}
                               </>
                             ) : (
                               <>
                                 {tCheckout("placeOrder")} {tHeader("pound")}{" "}
                                 {freeShippingPrice &&
-                                sumPrice(order) > freeShippingPrice
+                                sumPrice(order) >= freeShippingPrice
                                   ? sumPrice(order)
-                                  : shippingPrice &&
-                                    sumPrice(order) + shippingPrice}
+                                  : sumPrice(order) + shippingPrice}
                               </>
                             )}
                           </>
@@ -972,14 +841,14 @@ const CheckoutPage = () => {
                       {lang === "ar" ? (
                         <>
                           {freeShippingPrice &&
-                          sumPrice(order) > freeShippingPrice
+                          sumPrice(order) >= freeShippingPrice
                             ? `${tCheckout("freeShip")}`
                             : ` ${shippingPrice} ${tHeader("pound")}`}{" "}
                         </>
                       ) : (
                         <>
                           {freeShippingPrice &&
-                          sumPrice(order) > freeShippingPrice
+                          sumPrice(order) >= freeShippingPrice
                             ? `${tCheckout("freeShip")}`
                             : `${tHeader("pound")} ${shippingPrice}`}{" "}
                         </>
@@ -993,20 +862,18 @@ const CheckoutPage = () => {
                     {lang === "ar" ? (
                       <>
                         {freeShippingPrice &&
-                        sumPrice(order) > freeShippingPrice
+                        sumPrice(order) >= freeShippingPrice
                           ? sumPrice(order)
-                          : shippingPrice &&
-                            sumPrice(order) + shippingPrice}{" "}
+                          : sumPrice(order) + shippingPrice}{" "}
                         {tHeader("pound")}{" "}
                       </>
                     ) : (
                       <>
                         {tHeader("pound")}{" "}
                         {freeShippingPrice &&
-                        sumPrice(order) > freeShippingPrice
+                        sumPrice(order) >= freeShippingPrice
                           ? sumPrice(order)
-                          : shippingPrice &&
-                            sumPrice(order) + shippingPrice}{" "}
+                          : sumPrice(order) + shippingPrice}{" "}
                       </>
                     )}
                   </span>

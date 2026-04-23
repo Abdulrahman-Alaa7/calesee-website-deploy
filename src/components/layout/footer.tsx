@@ -52,8 +52,16 @@ const Footer = () => {
 
   const footerStoreLinks = [
     { href: "/store", text: tFooter("footLink1"), type: "store" as const },
-    { href: "/store", text: tFooter("footLinkNew"), type: "new" as const },
-    { href: "/store", text: tFooter("footLinkHot"), type: "hot" as const },
+    {
+      href: "/store?category=new",
+      text: tFooter("footLinkNew"),
+      type: "new" as const,
+    },
+    {
+      href: "/store?category=hot",
+      text: tFooter("footLinkHot"),
+      type: "hot" as const,
+    },
     {
       href: "/categories",
       text: t("productsFilCat"),

@@ -14,7 +14,7 @@ export type Slides = {
 
 export type Settings = {
   id: string;
-  shippingPrice: number;
+  defaultShippingPrice: number;
   freeShippingPrice: number;
   freeShipDescEn: string;
   freeShipDescAr: string;

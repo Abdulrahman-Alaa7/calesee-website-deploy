@@ -119,11 +119,9 @@ export default function StorePage({
       const inPrice = price >= priceRange[0] && price <= priceRange[1];
 
       const inNew = selectedCategory === "new" ? true : true;
-
-      const inCategory =
-        selectedCategory !== "new" && selectedCategory !== "hot"
-          ? p.category?.id === selectedCategory
-          : true;
+      const inCategory = !["new", "hot"].includes(selectedCategory)
+        ? p.category?.id === selectedCategory
+        : true;
 
       const inSize =
         selectedSizes.length === 0 ||
@@ -239,6 +237,28 @@ export default function StorePage({
     setSelectedCategory("new");
     setSortBy("default");
   };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const categorySlug = params.get("category");
+
+      if (!categorySlug) return;
+
+      if (categorySlug === "hot" || categorySlug === "new") {
+        setSelectedCategory(categorySlug);
+        return;
+      }
+
+      const matchedCategory = categories.find(
+        (c) => generateSlug(c.nameEn) === categorySlug,
+      );
+
+      if (matchedCategory) {
+        setSelectedCategory(matchedCategory.id);
+      }
+    }
+  }, [categories]);
 
   return (
     <div className="min-h-screen bg-[#fbfbfb] animate-slide-in">

@@ -97,6 +97,14 @@ export const GET_PRODUCT = gql`
             updatedAt
           }
         }
+        reviews {
+          id
+          name
+          comment
+          rating
+          imageUrl
+          createdAt
+        }
         createdAt
         updatedAt
       }

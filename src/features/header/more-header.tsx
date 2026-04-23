@@ -13,13 +13,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { CiMenuBurger } from "react-icons/ci";
 import { FaInstagram, FaFacebookF, FaTiktok } from "react-icons/fa";
 
-type MenuLink = {
-  id: string;
-  href: string;
-  label: string;
-  storeCategory: string | null;
-};
-
 const menuLinks = [
   {
     id: "01",
@@ -28,8 +21,18 @@ const menuLinks = [
     storeCategory: null as string | null,
   },
   { id: "02", href: "/store", label: "footLink1", storeCategory: null },
-  { id: "03", href: "/store", label: "footLinkNew", storeCategory: "new" },
-  { id: "04", href: "/store", label: "footLinkHot", storeCategory: "hot" },
+  {
+    id: "03",
+    href: "/store?category=new",
+    label: "footLinkNew",
+    storeCategory: "new",
+  },
+  {
+    id: "04",
+    href: "/store?category=hot",
+    label: "footLinkHot",
+    storeCategory: "hot",
+  },
   { id: "05", href: "/categories", label: "footLinkHot", storeCategory: null },
   { id: "06", href: "/about-us", label: "footLink2", storeCategory: null },
   {
@@ -85,18 +88,8 @@ const MoreHeader = () => {
 
   const closeMenu = () => setIsOpen(false);
 
-  const handleNavigationItemClick = (item: MenuLink) => {
+  const handleNavigationItemClick = () => {
     closeMenu();
-
-    if (typeof window !== "undefined" && item.href === "/store") {
-      if (item.storeCategory === "hot") {
-        sessionStorage.setItem("selectedStoreCategory", "hot");
-      } else if (item.storeCategory === "new") {
-        sessionStorage.setItem("selectedStoreCategory", "new");
-      } else {
-        sessionStorage.removeItem("selectedStoreCategory");
-      }
-    }
   };
 
   return (
@@ -133,7 +126,7 @@ const MoreHeader = () => {
             <Link
               key={item.id}
               href={item.href}
-              onClick={() => handleNavigationItemClick(item)}
+              onClick={() => handleNavigationItemClick()}
               className="group relative gap-1 flex items-start w-full py-2 transition-all duration-300 hover:translate-x-2 uppercase"
             >
               <span className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900  group-hover:text-[#947268] transition-colors duration-300">

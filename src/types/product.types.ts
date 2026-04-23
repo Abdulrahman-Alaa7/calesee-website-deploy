@@ -1,3 +1,12 @@
+export type Review = {
+  id: string;
+  name: string;
+  comment: string;
+  rating: number;
+  imageUrl?: string;
+  createdAt: string;
+};
+
 export type Product = {
   id: string;
   name: string;
@@ -38,6 +47,7 @@ export type Product = {
   createdAt?: string;
   updatedAt?: string;
   relatedProducts?: Product[];
+  reviews?: Review[];
 };
 
 export type ShippingItem = {
