@@ -239,6 +239,16 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
     return selectedSizeEntity?.colors ?? [];
   }, [selectedSizeEntity]);
 
+  const selectedColorEntity = useMemo(() => {
+    if (!colorsForSelectedSize.length || !selectedColor) return undefined;
+    return colorsForSelectedSize.find((c) => c.hex === selectedColor);
+  }, [colorsForSelectedSize, selectedColor]);
+
+  const isOutOfStock =
+    !!product.soldOut ||
+    !!selectedColorEntity?.soldout ||
+    !!selectedSizeEntity?.soldout;
+
   useEffect(() => {
     if (
       !isShipItem &&
@@ -559,13 +569,13 @@ const ProductInfo: React.FC<Props> = memo(({ product, relatedProducts }) => {
                   value={displayedQuantity}
                   onInc={() => setDisplayedQuantity((p) => p + 1)}
                   onDec={() => setDisplayedQuantity((p) => Math.max(1, p - 1))}
-                  disabled={loadingBuy || product.soldOut}
+                  disabled={loadingBuy || isOutOfStock}
                 />
               </div>
             </div>
 
             <div className="flex flex-col gap-3 mt-2">
-              {product?.soldOut ? (
+              {isOutOfStock ? (
                 <Button
                   disabled
                   className="w-full h-14 rounded-full text-lg bg-gray-300 text-gray-500"

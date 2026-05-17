@@ -136,6 +136,16 @@ export const ProductsHome = ({
     return selectedSizeEntity.colors;
   }, [selectedSizeEntity]);
 
+  const selectedColorEntity = useMemo(() => {
+    if (!colorsForSelectedSize.length || !selectedColor) return undefined;
+    return colorsForSelectedSize.find((c) => getOptionValue(c) === selectedColor);
+  }, [colorsForSelectedSize, selectedColor]);
+
+  const isOutOfStock =
+    ("soldOut" in product && !!product.soldOut) ||
+    isOptionSoldOut(selectedColorEntity) ||
+    isOptionSoldOut(selectedSizeEntity);
+
   useEffect(() => {
     if (!isShipItem && typedProduct?.sizes?.length) {
       if (!selectedSize && initialSize) {
@@ -615,7 +625,7 @@ export const ProductsHome = ({
                     type="button"
                     className="w-9 h-9 rounded-full"
                     onClick={handleDecrease}
-                    disabled={displayedQuantity === 1 || loadingBuy}
+                    disabled={displayedQuantity === 1 || loadingBuy || isOutOfStock}
                     aria-label="less"
                     name="minus"
                     accessKey={`Less_quantity_${product.name}`}
@@ -633,7 +643,7 @@ export const ProductsHome = ({
                     onClick={handleIncrease}
                     aria-label="More"
                     name="plus"
-                    disabled={loadingBuy}
+                    disabled={loadingBuy || isOutOfStock}
                     accessKey={`More_Quantity_${product.name}`}
                   >
                     <Plus size={20} />
@@ -641,7 +651,7 @@ export const ProductsHome = ({
                 </div>
               </div>
 
-              {product.soldOut ? (
+              {isOutOfStock ? (
                 <Button className="w-[90%] py-6 !cursor-not-allowed !mt-5 bg-primary/50 hover:bg-primary/60 text-white rounded-full mx-auto flex justify-center items-center">
                   {t("soldOutBtn")}
                 </Button>
@@ -655,17 +665,13 @@ export const ProductsHome = ({
                     }
                     aria-label={`Add ${product.name} to bag`}
                     accessKey={`Add_To_Bag_${product.name}`}
-                    disabled={
-                      ("soldOut" in product && product.soldOut) || loadingBuy
-                    }
+                    disabled={loadingBuy}
                   >
                     {t("addToBagBtn")}
                   </Button>
 
                   <Button
-                    disabled={
-                      ("soldOut" in product && product.soldOut) || loadingBuy
-                    }
+                    disabled={loadingBuy}
                     className="w-[90%] bg-[#000000] hover:bg-[#947268] p-6 rounded-full mx-auto flex justify-center items-center"
                     onClick={() =>
                       handleBuyItNow(typedProduct, selectedSize, selectedColor)

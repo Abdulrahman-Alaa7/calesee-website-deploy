@@ -11,7 +11,7 @@ import Header from "@/components/layout/header";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/layout/footer";
 import { Provider } from "@/utils/Provider";
-import Script from "next/script";
+// import Script from "next/script";
 import AnalyticsListener from "@/components/analytics-listener";
 
 const fontSans = FontSans({
@@ -27,7 +27,7 @@ const cairo = Cairo({
   variable: "--font-cairo",
 });
 
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
+// const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 export default async function RootLayout({
   children,
@@ -45,12 +45,12 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={`${locale === "ar" ? `rtl` : `ltr`}`}>
       <head>
-        <meta
+        {/* <meta
           name="facebook-domain-verification"
           content="5cu4a7gq0gn7su6km8j9frsow53xdw"
-        />
+        /> */}
       </head>
-      {GTM_ID && (
+      {/* {GTM_ID && (
         <Script
           id="gtm-script"
           strategy="afterInteractive"
@@ -66,7 +66,7 @@ export default async function RootLayout({
       `,
           }}
         />
-      )}
+      )} */}
 
       <body
         className={cn(
@@ -77,7 +77,7 @@ export default async function RootLayout({
           cairo.variable,
         )}
       >
-        {GTM_ID && (
+        {/* {GTM_ID && (
           <noscript>
             <iframe
               src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
@@ -86,7 +86,7 @@ export default async function RootLayout({
               style={{ display: "none", visibility: "hidden" }}
             />
           </noscript>
-        )}
+        )} */}
 
         <AnalyticsListener />
         <Provider>
